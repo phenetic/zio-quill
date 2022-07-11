@@ -4619,6 +4619,43 @@ After:
 [info]   |   INNER JOIN Address a ON a.ownerFk = p.id
 ```
 
+# Compiler performance tip
+
+Quill could be extremely slow while compling extremely large models.
+
+For example, compiling a file with 20 query of a model of 100 fields may take one or two minutes.
+
+Most time are wasted generating `QueryMeta` instance of every query. Because it is not reused by default.
+
+This can be improved by adding a `QueryMeta` instance somewhere in the scope like this.
+
+```scala
+
+case class LargeModel(
+  field1: Long,
+  field2: String,
+  // ... more fields
+)
+
+// Prevent compiler use this macro expansion by default.
+import ctx.{materializeQueryMeta => _, _}
+
+// Note, this implicit instance must not have type annotion, otherwise related query will become dynamic query.
+// Since quill needs the concrete type information generate by the whitebox macro
+implicit val largeModelQueryMeta = ctx.materializeQueryMeta[LargeModel]
+
+def queryById(id: Long): Future[Seq[LargeModel]] = {
+  ctx.run {
+    query[LargeModel].filter(_.id == lift(id))
+  }
+}
+
+// ... more queries
+
+```
+
+After doing this, compiling time dramatically reduce from 2 minutes to 20 seconds
+
 # Additional resources
 
 ## Templates

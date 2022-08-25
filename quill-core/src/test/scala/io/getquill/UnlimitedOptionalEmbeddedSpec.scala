@@ -2,11 +2,13 @@ package io.getquill
 
 import io.getquill.ast.Renameable.Fixed
 import io.getquill.ast.{ Entity, PropertyAlias }
+import io.getquill.base.Spec
 import io.getquill.context.mirror.Row
 import io.getquill.quat._
+import io.getquill.MirrorContexts.testContext
 
 class UnlimitedOptionalEmbeddedSpec extends Spec {
-  val ctx = testContext
+  val ctx = MirrorContexts.testContext
 
   import ctx._
 

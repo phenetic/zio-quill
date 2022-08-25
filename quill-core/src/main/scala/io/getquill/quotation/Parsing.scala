@@ -20,7 +20,7 @@ import io.getquill.util.Messages.TraceType
 import io.getquill.util.{ Interleave, Interpolator, Messages }
 import io.getquill.{ Quoted, Delete => DslDelete, Insert => DslInsert, Query => DslQuery, Update => DslUpdate }
 
-trait Parsing extends ValueComputation with QuatMaking {
+trait Parsing extends ValueComputation with QuatMaking with MacroUtilBase {
   this: Quotation =>
 
   import c.universe.{ Ident => _, Constant => _, Function => _, If => _, Block => _, _ }
@@ -133,14 +133,14 @@ trait Parsing extends ValueComputation with QuatMaking {
 
   val liftParser: Parser[Lift] = Parser[Lift] {
 
-    case q"$pack.liftScalar[$t]($value)($encoder)"          => ScalarValueLift(value.toString, value, encoder, inferQuat(q"$t".tpe))
-    case q"$pack.liftCaseClass[$t]($value)"                 => CaseClassValueLift(value.toString, value, inferQuat(q"$t".tpe))
+    case q"$pack.liftScalar[$t]($value)($encoder)"          => ScalarValueLift(value.toString, External.Source.Parser, value, encoder, inferQuat(q"$t".tpe))
+    case q"$pack.liftCaseClass[$t]($value)"                 => CaseClassValueLift(value.toString, value.toString, value, inferQuat(q"$t".tpe))
 
     case q"$pack.liftQueryScalar[$u, $t]($value)($encoder)" => ScalarQueryLift(value.toString, value, encoder, inferQuat(q"$t".tpe))
     case q"$pack.liftQueryCaseClass[$u, $t]($value)"        => CaseClassQueryLift(value.toString, value, inferQuat(q"$t".tpe))
 
     // Unused, it's here only to make eclipse's presentation compiler happy :(
-    case q"$pack.lift[$t]($value)"                          => ScalarValueLift(value.toString, value, q"null", inferQuat(q"$t".tpe))
+    case q"$pack.lift[$t]($value)"                          => ScalarValueLift(value.toString, External.Source.Parser, value, q"null", inferQuat(q"$t".tpe))
     case q"$pack.liftQuery[$t, $u]($value)"                 => ScalarQueryLift(value.toString, value, q"null", inferQuat(q"$t".tpe))
   }
 
@@ -370,8 +370,18 @@ trait Parsing extends ValueComputation with QuatMaking {
 
   val impureInfixParser = combinedInfixParser(false, Quat.Value) // TODO Verify Quat in what cases does this come up?
 
+  object InfixMatch {
+    def unapply(tree: Tree) =
+      tree match {
+        case q"$pack.InfixInterpolator(scala.StringContext.apply(..${ parts: List[String] })).infix(..$params)" => Some((parts, params))
+        case q"$pack.QsqlInfixInterpolator(scala.StringContext.apply(..${ parts: List[String] })).qsql(..$params)" => Some((parts, params))
+        case q"$pack.SqlInfixInterpolator(scala.StringContext.apply(..${ parts: List[String] })).sql(..$params)" => Some((parts, params))
+        case _ => None
+      }
+  }
+
   def combinedInfixParser(infixIsPure: Boolean, quat: Quat, infixIsTransparent: Boolean = false): Parser[Ast] = Parser[Ast] {
-    case q"$pack.InfixInterpolator(scala.StringContext.apply(..${ parts: List[String] })).infix(..$params)" =>
+    case InfixMatch(parts, params) =>
       // Parts that end with # indicate this is a dynamic infix.
       if (parts.find(_.endsWith("#")).isDefined) {
         val elements =

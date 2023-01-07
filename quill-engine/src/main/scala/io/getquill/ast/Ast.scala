@@ -198,19 +198,21 @@ case class GroupBy(query: Ast, alias: Ident, body: Ast) extends Query {
 case class Aggregation(operator: AggregationOperator, ast: Ast) extends Query {
   def quat =
     operator match {
-      case AggregationOperator.`min`  => ast.quat
-      case AggregationOperator.`max`  => ast.quat
-      case AggregationOperator.`avg`  => Quat.Value
-      case AggregationOperator.`sum`  => Quat.Value
-      case AggregationOperator.`size` => Quat.Value
+      case AggregationOperator.`min`    => ast.quat
+      case AggregationOperator.`max`    => ast.quat
+      case AggregationOperator.`avg`    => Quat.Value
+      case AggregationOperator.`sum`    => Quat.Value
+      case AggregationOperator.`size`   => Quat.Value
+      case AggregationOperator.`custom` => Quat.Value
     }
   def bestQuat: Quat =
     operator match {
-      case AggregationOperator.`min`  => ast.bestQuat
-      case AggregationOperator.`max`  => ast.bestQuat
-      case AggregationOperator.`avg`  => Quat.Value
-      case AggregationOperator.`sum`  => Quat.Value
-      case AggregationOperator.`size` => Quat.Value
+      case AggregationOperator.`min`    => ast.bestQuat
+      case AggregationOperator.`max`    => ast.bestQuat
+      case AggregationOperator.`avg`    => Quat.Value
+      case AggregationOperator.`sum`    => Quat.Value
+      case AggregationOperator.`size`   => Quat.Value
+      case AggregationOperator.`custom` => Quat.Value
     }
 }
 

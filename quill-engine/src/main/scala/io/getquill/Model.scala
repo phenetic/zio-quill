@@ -40,6 +40,7 @@ sealed trait Query[+T] extends QAC[Nothing, T] {
   def avg[U >: T](implicit n: Numeric[U]): Option[BigDecimal] = NonQuotedException()
   def sum[U >: T](implicit n: Numeric[U]): Option[T] = NonQuotedException()
   def size: Long = NonQuotedException()
+  def aggregate[R](f: T => R): R
 
   def join[A >: T, B](q: Query[B]): JoinQuery[A, B, (A, B)] = NonQuotedException()
   def leftJoin[A >: T, B](q: Query[B]): JoinQuery[A, B, (A, Option[B])] = NonQuotedException()

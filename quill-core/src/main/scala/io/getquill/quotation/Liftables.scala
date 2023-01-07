@@ -100,11 +100,12 @@ trait Liftables extends QuatLiftable {
   }
 
   implicit val aggregationOperatorLiftable: Liftable[AggregationOperator] = Liftable[AggregationOperator] {
-    case AggregationOperator.`min`  => q"$pack.AggregationOperator.`min`"
-    case AggregationOperator.`max`  => q"$pack.AggregationOperator.`max`"
-    case AggregationOperator.`avg`  => q"$pack.AggregationOperator.`avg`"
-    case AggregationOperator.`sum`  => q"$pack.AggregationOperator.`sum`"
-    case AggregationOperator.`size` => q"$pack.AggregationOperator.`size`"
+    case AggregationOperator.`min`    => q"$pack.AggregationOperator.`min`"
+    case AggregationOperator.`max`    => q"$pack.AggregationOperator.`max`"
+    case AggregationOperator.`avg`    => q"$pack.AggregationOperator.`avg`"
+    case AggregationOperator.`sum`    => q"$pack.AggregationOperator.`sum`"
+    case AggregationOperator.`size`   => q"$pack.AggregationOperator.`size`"
+    case AggregationOperator.`custom` => q"$pack.AggregationOperator.`custom`"
   }
 
   implicit val renameableLiftable: Liftable[Renameable] = Liftable[Renameable] {

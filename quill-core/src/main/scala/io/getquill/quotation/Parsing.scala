@@ -213,6 +213,8 @@ trait Parsing extends ValueComputation with QuatMaking {
     case q"$source.map[$t](($alias) => $body)" if (is[DslQuery[Any]](source)) =>
       Map(astParser(source), identParser(alias), astParser(body))
 
+    case q"$source.aggregate[$t](($alias) => $body)" if (is[DslQuery[Any]](source)) => Aggregation(AggregationOperator.`custom`, Map(astParser(source), identParser(alias), astParser(body)))
+
     case q"$source.flatMap[$t](($alias) => $body)" if (is[DslQuery[Any]](source)) =>
       FlatMap(astParser(source), identParser(alias), astParser(body))
 

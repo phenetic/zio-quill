@@ -56,4 +56,5 @@ object AggregationOperator {
   case object `avg` extends AggregationOperator
   case object `sum` extends AggregationOperator
   case object `size` extends AggregationOperator
+  case object `custom` extends AggregationOperator
 }

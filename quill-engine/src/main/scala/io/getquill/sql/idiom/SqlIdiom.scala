@@ -447,11 +447,12 @@ trait SqlIdiom extends Idiom {
   }
 
   implicit val aggregationOperatorTokenizer: Tokenizer[AggregationOperator] = Tokenizer[AggregationOperator] {
-    case AggregationOperator.`min`  => stmt"MIN"
-    case AggregationOperator.`max`  => stmt"MAX"
-    case AggregationOperator.`avg`  => stmt"AVG"
-    case AggregationOperator.`sum`  => stmt"SUM"
-    case AggregationOperator.`size` => stmt"COUNT"
+    case AggregationOperator.`min`    => stmt"MIN"
+    case AggregationOperator.`max`    => stmt"MAX"
+    case AggregationOperator.`avg`    => stmt"AVG"
+    case AggregationOperator.`sum`    => stmt"SUM"
+    case AggregationOperator.`size`   => stmt"COUNT"
+    case AggregationOperator.`custom` => stmt""
   }
 
   implicit val binaryOperatorTokenizer: Tokenizer[BinaryOperator] = Tokenizer[BinaryOperator] {

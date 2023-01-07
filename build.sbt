@@ -1,9 +1,12 @@
 import java.io.{File => JFile}
-import com.jsuereth.sbtpgp.PgpKeys.publishSigned
+//import com.jsuereth.sbtpgp.PgpKeys.publishSigned
 
 import scala.collection.immutable.ListSet
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
+
+ThisBuild / githubOwner      := "phenetic"
+ThisBuild / githubRepository := "zio-quill"
 
 inThisBuild(
   List(
@@ -153,11 +156,11 @@ lazy val `quill` =
   (project in file("."))
     .settings(commonSettings: _*)
     .settings(
-      publishArtifact      := false,
-      publish / skip       := true,
-      publishLocal / skip  := true,
-      publishSigned / skip := true,
-      crossScalaVersions   := Nil // https://www.scala-sbt.org/1.x/docs/Cross-Build.html#Cross+building+a+project+statefully
+      publishArtifact     := false,
+      publish / skip      := true,
+      publishLocal / skip := true,
+      // publishSigned / skip := true,
+      crossScalaVersions := Nil // https://www.scala-sbt.org/1.x/docs/Cross-Build.html#Cross+building+a+project+statefully
     )
     .aggregate(filteredModules.map(_.project).toSeq: _*)
 

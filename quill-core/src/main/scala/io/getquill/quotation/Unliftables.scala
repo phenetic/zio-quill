@@ -99,11 +99,12 @@ trait Unliftables extends QuatUnliftable {
   }
 
   implicit val aggregationOperatorUnliftable: Unliftable[AggregationOperator] = Unliftable[AggregationOperator] {
-    case q"$pack.AggregationOperator.`min`"  => AggregationOperator.`min`
-    case q"$pack.AggregationOperator.`max`"  => AggregationOperator.`max`
-    case q"$pack.AggregationOperator.`avg`"  => AggregationOperator.`avg`
-    case q"$pack.AggregationOperator.`sum`"  => AggregationOperator.`sum`
-    case q"$pack.AggregationOperator.`size`" => AggregationOperator.`size`
+    case q"$pack.AggregationOperator.`min`"    => AggregationOperator.`min`
+    case q"$pack.AggregationOperator.`max`"    => AggregationOperator.`max`
+    case q"$pack.AggregationOperator.`avg`"    => AggregationOperator.`avg`
+    case q"$pack.AggregationOperator.`sum`"    => AggregationOperator.`sum`
+    case q"$pack.AggregationOperator.`size`"   => AggregationOperator.`size`
+    case q"$pack.AggregationOperator.`custom`" => AggregationOperator.`custom`
   }
 
   implicit val queryUnliftable: Unliftable[Query] = Unliftable[Query] {

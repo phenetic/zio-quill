@@ -243,13 +243,16 @@ trait Parsing extends ValueComputation with QuatMaking with MacroUtilBase {
       Aggregation(AggregationOperator.`avg`, astParser(a))
     case q"$pack.sum[$t]($a)($imp)" =>
       Aggregation(AggregationOperator.`sum`, astParser(a))
+    case q"$pack.aggregate[$t]($a)($imp)" =>
+      Aggregation(AggregationOperator.`custom`, astParser(a))
 
-    case q"$a.value[$t]" if (is[DslQuery[Any]](a))   => astParser(a)
-    case q"$a.min[$t]" if (is[DslQuery[Any]](a))     => Aggregation(AggregationOperator.`min`, astParser(a))
-    case q"$a.max[$t]" if (is[DslQuery[Any]](a))     => Aggregation(AggregationOperator.`max`, astParser(a))
-    case q"$a.avg[$t]($n)" if (is[DslQuery[Any]](a)) => Aggregation(AggregationOperator.`avg`, astParser(a))
-    case q"$a.sum[$t]($n)" if (is[DslQuery[Any]](a)) => Aggregation(AggregationOperator.`sum`, astParser(a))
-    case q"$a.size" if (is[DslQuery[Any]](a))        => Aggregation(AggregationOperator.`size`, astParser(a))
+    case q"$a.value[$t]" if (is[DslQuery[Any]](a))                        => astParser(a)
+    case q"$a.min[$t]" if (is[DslQuery[Any]](a))                          => Aggregation(AggregationOperator.`min`, astParser(a))
+    case q"$a.max[$t]" if (is[DslQuery[Any]](a))                          => Aggregation(AggregationOperator.`max`, astParser(a))
+    case q"$a.avg[$t]($n)" if (is[DslQuery[Any]](a))                      => Aggregation(AggregationOperator.`avg`, astParser(a))
+    case q"$a.sum[$t]($n)" if (is[DslQuery[Any]](a))                      => Aggregation(AggregationOperator.`sum`, astParser(a))
+    case q"$a.size" if (is[DslQuery[Any]](a))                             => Aggregation(AggregationOperator.`size`, astParser(a))
+    case q"$a.aggregate[$t](($alias) => $body)" if (is[DslQuery[Any]](a)) => Aggregation(AggregationOperator.`custom`, Map(astParser(a), identParser(alias), astParser(body)))
 
     case q"$source.take($n)" if (is[DslQuery[Any]](source)) =>
       Take(astParser(source), astParser(n))

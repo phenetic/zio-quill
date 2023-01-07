@@ -51,9 +51,10 @@ object SetOperator {
 sealed trait AggregationOperator extends Operator
 
 object AggregationOperator {
-  case object `min`  extends AggregationOperator
-  case object `max`  extends AggregationOperator
-  case object `avg`  extends AggregationOperator
-  case object `sum`  extends AggregationOperator
-  case object `size` extends AggregationOperator
+  case object `min`    extends AggregationOperator
+  case object `max`    extends AggregationOperator
+  case object `avg`    extends AggregationOperator
+  case object `sum`    extends AggregationOperator
+  case object `size`   extends AggregationOperator
+  case object `custom` extends AggregationOperator
 }

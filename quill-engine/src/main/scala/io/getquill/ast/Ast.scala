@@ -203,19 +203,21 @@ final case class GroupByMap(query: Ast, byAlias: Ident, byBody: Ast, mapAlias: I
 final case class Aggregation(operator: AggregationOperator, ast: Ast) extends Query {
   override lazy val quat: Quat =
     operator match {
-      case AggregationOperator.`min`  => ast.quat
-      case AggregationOperator.`max`  => ast.quat
-      case AggregationOperator.`avg`  => Quat.Value
-      case AggregationOperator.`sum`  => Quat.Value
-      case AggregationOperator.`size` => Quat.Value
+      case AggregationOperator.`min`    => ast.quat
+      case AggregationOperator.`max`    => ast.quat
+      case AggregationOperator.`avg`    => Quat.Value
+      case AggregationOperator.`sum`    => Quat.Value
+      case AggregationOperator.`size`   => Quat.Value
+      case AggregationOperator.`custom` => Quat.Value
     }
   override lazy val bestQuat: Quat =
     operator match {
-      case AggregationOperator.`min`  => ast.bestQuat
-      case AggregationOperator.`max`  => ast.bestQuat
-      case AggregationOperator.`avg`  => Quat.Value
-      case AggregationOperator.`sum`  => Quat.Value
-      case AggregationOperator.`size` => Quat.Value
+      case AggregationOperator.`min`    => ast.bestQuat
+      case AggregationOperator.`max`    => ast.bestQuat
+      case AggregationOperator.`avg`    => Quat.Value
+      case AggregationOperator.`sum`    => Quat.Value
+      case AggregationOperator.`size`   => Quat.Value
+      case AggregationOperator.`custom` => Quat.Value
     }
 }
 
